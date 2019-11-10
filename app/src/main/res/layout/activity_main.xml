@@ -15,6 +15,7 @@
         android:layout_marginTop="40dp"
         android:layout_marginEnd="8dp"
         android:orientation="vertical"
+        android:background="@drawable/sp_black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,6 +37,7 @@
             app:thumbsResource="@drawable/ic_ucoin" />
 
         <ImageView
+            android:id="@+id/imageView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
@@ -46,16 +48,66 @@
             app:layout_constraintStart_toStartOf="@+id/seekBar"
             app:layout_constraintTop_toTopOf="@+id/seekBar" />
 
+        <LinearLayout
+            android:id="@+id/linearLayoutFists"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/sp_orange"
+            android:gravity="left|bottom"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView">
+
+            <TextView
+                android:id="@+id/textFirtsValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:background="@drawable/sp_blue"
+                android:text="0" />
+        </LinearLayout>
+
         <GridLayout
             android:id="@+id/gridlayoutValues"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/sp_red"
+            app:layout_constraintEnd_toStartOf="@+id/linearLayoutLast"
+            app:layout_constraintStart_toEndOf="@+id/linearLayoutFists"
             app:layout_constraintTop_toBottomOf="@+id/seekBar" />
 
+        <LinearLayout
+            android:id="@+id/linearLayoutLast"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:gravity="right|bottom"
+            android:background="@drawable/sp_orange"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView">
+
+            <TextView
+                android:id="@+id/textLastValue"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/sp_blue"
+                android:text="10000" />
+        </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/buttonChange"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:text="Cambiar Valores"
+        android:background="@color/colorPrimary"
+        android:textColor="#FFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
