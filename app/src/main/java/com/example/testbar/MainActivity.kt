@@ -14,7 +14,7 @@ import android.widget.LinearLayout
 
 
 class MainActivity : AppCompatActivity() {
-    private var contadorCargas = 0
+    private var contadorCargas = 4
     private var listTextView: ArrayList<TextView> =ArrayList()
 
     private var listaMaestraObtenida = false
@@ -40,6 +40,10 @@ class MainActivity : AppCompatActivity() {
                 contadorCargas++
             }else if (contadorCargas==3){
                 var listFloat= listOf(10F,50F,105F,130F)
+                setearLosDatos(listFloat)
+                contadorCargas++
+            }else if(contadorCargas==4){
+                var listFloat= listOf(5F,200F)
                 setearLosDatos(listFloat)
                 contadorCargas++
             }else{
@@ -110,7 +114,10 @@ class MainActivity : AppCompatActivity() {
     private fun managerPintarLista(){
         var numeroSteps = listaMaestra.size-1
 
-        Log.e("ANCHO TEX",textLastValue.width.toString())
+        Log.e("ANCHO TEX",textLastValue.width.toString()) //ancho por defecto con el texto puesto quemado
+
+        textFirtsValue.width = textLastValue.width
+        //textLastValue.width = textLastValue.width
 
     }
 }
