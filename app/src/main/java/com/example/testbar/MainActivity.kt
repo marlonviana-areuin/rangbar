@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.Gravity
+import android.view.ViewTreeObserver
 import android.widget.GridLayout
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -49,8 +50,18 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+        constraintMaster.viewTreeObserver.addOnGlobalLayoutListener(object:
+            ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                if (constraintMaster.width > 0 && textValue7.width> 0 && textValue1.width>0) {
+                    constraintMaster.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    pintadoLinearValue()
+                }
+            }
+        })
 
     }
+
 
 
 
@@ -62,7 +73,7 @@ class MainActivity : AppCompatActivity() {
             //managerPintarLista()
             //iniciarPinatadoDeLista(listaMaestra)
 
-            pintadoLinearValue(listaMaestra)
+            pintadoLinearValue()
 
             listaMaestraObtenida= true
         }else{
@@ -70,108 +81,37 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-    /** GRID DE VALORES PINTADA **/
-
-    private fun iniciarPinatadoDeLista(list:List<Float>){
-        var numberSteps = listaMaestra.size-1
-        var stepWidh = (constraintMaster.width-10/4*textLastValue.width)/numberSteps //ancho de la separacion entre steps
-
-        if (list.size>2){
-            gridlayoutValues.columnCount = list.size-2 //se le quitan dos colunan por los dos textview dentro de los linearlayout
-            gridlayoutValues.layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
-        }
-
-
-
-        for (i in list.indices) {
-
-            if (i==0){
-                textFirtsValue.text = list[i].toInt().toString()
-                listTextView.add(textFirtsValue)
-            }else if (i == list.size-1){
-                //textLastValue.text = list[i].toInt().toString()
-                textLastValue.text = "1k+"
-                listTextView.add(textLastValue)
-            }else{
-               var posicionColumana = i-1
-
-                var titleText = TextView(this)
-                titleText.id = posicionColumana
-                titleText.text = list[i].toInt().toString()
-
-                var param = GridLayout.LayoutParams()
-                //param.height = LinearLayout.LayoutParams.WRAP_CONTENT
-                //param.width = stepWidh
-                //param.columnSpec =  GridLayout.spec(GridLayout.UNDEFINED, 1f)
-
-                titleText.gravity = Gravity.CENTER
-                //titleText.width = stepWidh
-                //titleText.layoutParams = param
-
-                listTextView.add(titleText)
-
-                gridlayoutValues.addView(titleText,posicionColumana)
-            }
-        }
-
-        Handler().postDelayed({
-            for (i in listTextView.indices){
-                Log.e("$i",listTextView[i].width.toString())
-            }
-
-        },200)
-
-    }
-
-    private fun managerPintarLista(){
-
-        Log.e("ANCHO TEX",textLastValue.width.toString()) //ancho por defecto con el texto puesto quemado
-
-        textFirtsValue.width = textLastValue.width
-        textLastValue.width = textLastValue.width
-
-        var numberSteps = listaMaestra.size-1
-        var stepWidh = (constraintMaster.width-textFirtsValue.width)/numberSteps //ancho de la separacion entre steps
-
-        Log.e("ANCHO STEP",stepWidh.toString())
-
-        var widhLinearLayoutFirts = (textLastValue.width/2)+(stepWidh/2)
-        Log.e("ANCHO LINEAR",widhLinearLayoutFirts.toString())
-        linearLayoutFirts.layoutParams.width = widhLinearLayoutFirts
-        linearLayoutLast.layoutParams.width = widhLinearLayoutFirts
-    }
-
-
     /** LINEAR PINTAR MANGER **/
 
-    private fun pintadoLinearValue(list:List<Float>){
-
-        var numberSteps = listaMaestra.size-1
-        var stepWidh = (constraintMaster.width-textValue7.width)/numberSteps
-        Log.e("CALCULO 1:", "(${constraintMaster.width}-${textValue7.width})/${numberSteps}" )
-        var widhLinearLayoutFirts = (textValue7.width/2)+(stepWidh/2)
-        Log.e("widhLinearLayoutFirts",widhLinearLayoutFirts.toString())
-
-        textValue1.width = widhLinearLayoutFirts
-        textValue7.width = widhLinearLayoutFirts
+    private fun pintadoLinearValue(){
+        var list= listOf(10F,20F,50F,100F,200F,500F,1000F)
 
         Handler().postDelayed({
+
+
+            var numberSteps = listaMaestra.size-1
+            var stepWidh = (constraintMaster.width-textValue7.width-100)/numberSteps
+            Log.e("TAMANO TEXTO",textValue7.width.toString())
+            Log.e("CALCULO 1:", "(${constraintMaster.width}-${textValue7.width})/${numberSteps}" )
+            Log.e("CALCULO 1 RES", stepWidh.toString() )
+            var widhLinearLayoutLast = (textValue7.width/2)+(stepWidh/2)
+            var widhLinearLayoutFirts = (textValue1.width/2)+(stepWidh/2)
+            Log.e("widhLinearLayoutFirts",widhLinearLayoutFirts.toString())
+
+            textValue1.width = widhLinearLayoutFirts
+            textValue7.width = widhLinearLayoutLast
+
 
             for (i in list.indices) {
 
                 if (i==0){
                     textValue1.text = list[i].toInt().toString()
-                    listTextView.add(textFirtsValue)
+                    listTextView.add(textValue1)
                 }else if (i == list.size-1){
                     textValue7.text = "1k+"
-                    listTextView.add(textLastValue)
+                    listTextView.add(textValue7)
                 }
             }
-
-            Log.e("TAMANO TEXTO",textValue1.width.toString())
-
-            Log.e("CALCULO",stepWidh.toString())
 
             textValue2.width = stepWidh
             textValue3.width = stepWidh
@@ -179,11 +119,20 @@ class MainActivity : AppCompatActivity() {
             textValue5.width = stepWidh
             textValue6.width = stepWidh
 
-            Log.e("2",textValue2.left.toString())
-            Log.e("3",textValue3.left.toString())
+
+        },100)
 
 
-        },2000)
+        Handler().postDelayed({
+            Log.e("1",textValue1.width.toString())
+
+            Log.e("2",textValue2.width.toString())
+            Log.e("3",textValue3.width.toString())
+
+            Log.e("linear",linearMaster.width.toString())
+
+        },200)
+
 
     }
 }
