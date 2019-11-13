@@ -5,18 +5,21 @@ import android.os.Handler
 import android.util.Log
 import android.view.Gravity
 import android.view.ViewTreeObserver
-import android.widget.GridLayout
+import android.widget.GridView
+import android.widget.LinearLayout
 import android.widget.TextView
-import kotlinx.android.synthetic.main.activity_main.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
     private var contadorCargas = 0
     private var listTextView: ArrayList<TextView> =ArrayList()
+    private var listLinearLayoutView: ArrayList<LinearLayout> =ArrayList()
 
     private var listaMaestraObtenida = false
     private var listaMaestra:List<Float> = ArrayList()
+    private var paddingReaddy =false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,15 +53,20 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+        manejadorVisual()
+
+    }
+
+    private fun  manejadorVisual(){
+
         constraintMaster.viewTreeObserver.addOnGlobalLayoutListener(object:
             ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                if (constraintMaster.width > 0 && textValue7.width> 0 && textValue1.width>0) {
-                    constraintMaster.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                    pintadoLinearValue()
-                }
+                constraintMaster.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                //pintadoLinearValue()
             }
         })
+
 
     }
 
@@ -69,13 +77,9 @@ class MainActivity : AppCompatActivity() {
 
         if (!listaMaestraObtenida){
             listaMaestra= list
-
-            //managerPintarLista()
-            //iniciarPinatadoDeLista(listaMaestra)
-
-            pintadoLinearValue()
-
             listaMaestraObtenida= true
+
+            pintadoLinearValue(listaMaestra)
         }else{
 
         }
@@ -83,16 +87,93 @@ class MainActivity : AppCompatActivity() {
 
     /** LINEAR PINTAR MANGER **/
 
-    private fun pintadoLinearValue(){
-        var list= listOf(10F,20F,50F,100F,200F,500F,1000F)
+    private fun pintadoLinearValue(list: List<Float>){
+
+        for (i in list.indices){
+
+            var textViewValue = TextView(this)
+            textViewValue.id = i
+            textViewValue.text = list[i].toString()
+
+            var param =  LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT)
+            textViewValue.gravity = Gravity.CENTER
+            textViewValue.layoutParams = param
+
+            if (i==0){
+                var linearFirst= LinearLayout(this)
+                linearFirst.id = i
+                linearFirst.gravity = Gravity.LEFT
+                var paramLinear =  LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT)
+
+                linearFirst.layoutParams = paramLinear
+
+                listLinearLayoutView.add(linearFirst)
+
+                linearFirst.addView(textViewValue)
+                linearLayoutValues.addView(linearFirst)
+            }else  if (i == list.size-1){
+                var linearLayoutLast= LinearLayout(this)
+                linearLayoutLast.id = i
+                linearLayoutLast.gravity = Gravity.RIGHT
+                var paramLinear =  LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT)
+
+                linearLayoutLast.layoutParams = paramLinear
+
+                listLinearLayoutView.add(linearLayoutLast)
+
+                linearLayoutLast.addView(textViewValue)
+                linearLayoutValues.addView(linearLayoutLast)
+            }else{
+                linearLayoutValues.addView(textViewValue)
+            }
+
+            listTextView.add(textViewValue)
+
+        }
+
 
         Handler().postDelayed({
 
+            var numberSteps = list.size-1
+            var stepWidth = (constraintMaster.width- listTextView[listTextView.size-1].width-100)/numberSteps
 
-            var numberSteps = listaMaestra.size-1
+            var widhLinearLayoutLast = (listTextView[listTextView.size-1].width/2)+(stepWidth/2)
+            //var widhLinearLayoutFirts = (listTextView[0].width/2)+(stepWidh/2)
+
+
+            for (i in listTextView.indices){
+                if (i==0){
+                    var param =  LinearLayout.LayoutParams(widhLinearLayoutLast,
+                        LinearLayout.LayoutParams.WRAP_CONTENT)
+                    listLinearLayoutView[0].layoutParams = param
+                    listTextView[i].width = listTextView[listTextView.size-1].width
+                }else  if (i == list.size-1){
+                    var param =  LinearLayout.LayoutParams(widhLinearLayoutLast,
+                        LinearLayout.LayoutParams.WRAP_CONTENT)
+
+                    listLinearLayoutView[1].layoutParams = param
+                }else{
+                    listTextView[i].width = stepWidth
+                }
+            }
+
+            /** Ajusta El ancho del imageview que contiene la lista**/
+            var widthImageView = stepWidth*numberSteps
+            imageViewLine.layoutParams.width = widthImageView
+
+
+            linearLayoutRangbar.layoutParams.width = stepWidth*list.size
+
+        },1)
+
+          /*  Log.e("--------------","--------------------")
+            var numberSteps = list.size-1
             var stepWidh = (constraintMaster.width-textValue7.width-100)/numberSteps
             Log.e("TAMANO TEXTO",textValue7.width.toString())
-            Log.e("CALCULO 1:", "(${constraintMaster.width}-${textValue7.width})/${numberSteps}" )
+            Log.e("CALCULO 1", "(${constraintMaster.width}-${textValue7.width}-100)/${numberSteps}" )
             Log.e("CALCULO 1 RES", stepWidh.toString() )
             var widhLinearLayoutLast = (textValue7.width/2)+(stepWidh/2)
             var widhLinearLayoutFirts = (textValue1.width/2)+(stepWidh/2)
@@ -120,18 +201,29 @@ class MainActivity : AppCompatActivity() {
             textValue6.width = stepWidh
 
 
-        },100)
 
 
         Handler().postDelayed({
+
             Log.e("1",textValue1.width.toString())
 
             Log.e("2",textValue2.width.toString())
             Log.e("3",textValue3.width.toString())
 
-            Log.e("linear",linearMaster.width.toString())
 
-        },200)
+            var paddingRangeBar = ((constraintMaster.width-linearLayoutValues.width)/2)/2
+            Log.e("View", "${constraintMaster.width}-${linearLayoutValues.width}")
+            Log.e("PaddingRangerBar",paddingRangeBar.toString())
+
+            val params = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT,ConstraintLayout.LayoutParams.MATCH_PARENT)
+            params.setMargins(paddingRangeBar, 0, paddingRangeBar, 0)
+
+            linearLayoutRangbar.layoutParams = params
+            //imageViewLine.layoutParams = params
+
+        },1)*/
+
+
 
 
     }

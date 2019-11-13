@@ -38,13 +38,14 @@
                 android:layout_height="wrap_content"
                 android:elevation="2dp"
                 app:backgroundColor="@color/traslucen"
-                app:backgroundHeight="3dp"
+                app:backgroundHeight="7dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:progressColor="#2624b7"
-                app:progressHeight="3dp"
+                app:progressColor="#662624B7"
+                app:progressHeight="7dp"
                 app:rounded="false"
+
                 app:thumbsResource="@drawable/ic_ucoin" />
 
         </LinearLayout>
@@ -52,50 +53,29 @@
 
         <ImageView
             android:id="@+id/imageViewLine"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:src="@drawable/img_dot_line"
+            android:layout_width="wrap_content"
+            android:layout_height="7dp"
+            android:background="@drawable/sp_white_border_rect"
             app:layout_constraintBottom_toBottomOf="@+id/linearLayoutRangbar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/linearLayoutRangbar" />
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout"
+        <LinearLayout
+            android:id="@+id/linearLayoutValues"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageViewLine">
-
-            <GridLayout
-                android:id="@+id/gridlayoutValues"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/sp_green"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <LinearLayout
-            android:id="@+id/linearMaster"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/sp_red"
             android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/constraintLayout">
+            app:layout_constraintTop_toBottomOf="@+id/linearLayoutRangbar">
 
-
+            <!--
             <TextView
                 android:id="@+id/textValue1"
                 android:layout_width="wrap_content"
@@ -159,6 +139,8 @@
                 android:background="@drawable/sp_green"
                 android:gravity="right"
                 android:text="1k+" />
+
+            -->
 
 
         </LinearLayout>
