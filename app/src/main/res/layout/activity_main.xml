@@ -26,26 +26,26 @@
             android:id="@+id/linearLayoutRangbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:elevation="2dp"
             android:background="@drawable/sp_green"
+            android:elevation="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.github.guilhe.views.SeekBarRangedView
                 android:id="@+id/seekBar"
+                android:background="@drawable/sp_red"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:elevation="2dp"
-                app:backgroundColor="@color/traslucen"
+                app:backgroundColor="@color/grayLight"
                 app:backgroundHeight="7dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:progressColor="#662624B7"
+                app:progressColor="#F02624B7"
                 app:progressHeight="7dp"
                 app:rounded="false"
-
                 app:thumbsResource="@drawable/ic_ucoin" />
 
         </LinearLayout>
@@ -67,87 +67,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:background="@drawable/sp_red"
+
             android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayoutRangbar">
-
-            <!--
-            <TextView
-                android:id="@+id/textValue1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:background="@drawable/sp_green"
-                android:gravity="left"
-                android:text="10" />
-
-            <TextView
-                android:id="@+id/textValue2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:background="@drawable/sp_red"
-                android:gravity="center"
-                android:text="20" />
-
-            <TextView
-                android:id="@+id/textValue3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:background="@drawable/sp_blue"
-                android:gravity="center"
-                android:text="50" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayoutRangbar"/>
 
 
-            <TextView
-                android:id="@+id/textValue4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:background="@drawable/sp_green"
-                android:gravity="center"
-                android:text="100" />
-
-            <TextView
-                android:id="@+id/textValue5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:background="@drawable/sp_red"
-                android:gravity="center"
-                android:text="200" />
-
-            <TextView
-                android:id="@+id/textValue6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:background="@drawable/sp_blue"
-                android:gravity="center"
-                android:text="500" />
-
-            <TextView
-                android:id="@+id/textValue7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:background="@drawable/sp_green"
-                android:gravity="right"
-                android:text="1k+" />
-
-            -->
-
-
-        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+    <ImageView
+        android:id="@+id/rangerSlider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_ucoin"/>
 
     <Button
         android:id="@+id/buttonChange"

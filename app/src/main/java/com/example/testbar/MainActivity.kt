@@ -1,4 +1,5 @@
 package com.example.testbar
+import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -10,6 +11,11 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import kotlinx.android.synthetic.main.activity_main.*
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -19,7 +25,8 @@ class MainActivity : AppCompatActivity() {
 
     private var listaMaestraObtenida = false
     private var listaMaestra:List<Float> = ArrayList()
-    private var paddingReaddy =false
+    private var numberStepMaster:Int=0
+    private var stepWidth:Int =0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,12 +34,16 @@ class MainActivity : AppCompatActivity() {
 
 
         buttonChange.setOnClickListener{
+            if (contadorCargas>4){
+                contadorCargas = 0
+            }
+
             if(contadorCargas==0){
-                var listFloat= listOf(10F,20F,50F,100F,200F,500F,1000F)
+                var listFloat= listOf(10F,20F,50F,100F,200F,500F,600F,1000F)
                 setearLosDatos(listFloat)
                 contadorCargas++
             }else if (contadorCargas==1){
-                var listFloat= listOf(10F,500F,200F)
+                var listFloat= listOf(20F,50F,200F)
                 setearLosDatos(listFloat)
                 contadorCargas++
             }else if (contadorCargas == 2){
@@ -44,11 +55,9 @@ class MainActivity : AppCompatActivity() {
                 setearLosDatos(listFloat)
                 contadorCargas++
             }else if(contadorCargas==4){
-                var listFloat= listOf(10F,200F)
+                var listFloat= listOf(100F,200F)
                 setearLosDatos(listFloat)
                 contadorCargas++
-            }else{
-                contadorCargas = 0
             }
         }
 
@@ -81,12 +90,11 @@ class MainActivity : AppCompatActivity() {
 
             pintadoLinearValue(listaMaestra)
         }else{
-
+            seekbarPaddingManager(list)
         }
     }
 
     /** LINEAR PINTAR MANGER **/
-
     private fun pintadoLinearValue(list: List<Float>){
 
         for (i in list.indices){
@@ -136,22 +144,20 @@ class MainActivity : AppCompatActivity() {
 
 
         Handler().postDelayed({
+            /** obtiene el numero de step y el ancho entre step**/
+            numberStepMaster = list.size-1
+            stepWidth = (constraintMaster.width- listTextView[listTextView.size-1].width-100)/numberStepMaster
 
-            var numberSteps = list.size-1
-            var stepWidth = (constraintMaster.width- listTextView[listTextView.size-1].width-100)/numberSteps
-
-            var widhLinearLayoutLast = (listTextView[listTextView.size-1].width/2)+(stepWidth/2)
-            //var widhLinearLayoutFirts = (listTextView[0].width/2)+(stepWidh/2)
-
+            var widhLinearLayoutBorder = (listTextView[listTextView.size-1].width/2)+(stepWidth/2)
 
             for (i in listTextView.indices){
                 if (i==0){
-                    var param =  LinearLayout.LayoutParams(widhLinearLayoutLast,
+                    var param =  LinearLayout.LayoutParams(widhLinearLayoutBorder,
                         LinearLayout.LayoutParams.WRAP_CONTENT)
                     listLinearLayoutView[0].layoutParams = param
                     listTextView[i].width = listTextView[listTextView.size-1].width
                 }else  if (i == list.size-1){
-                    var param =  LinearLayout.LayoutParams(widhLinearLayoutLast,
+                    var param =  LinearLayout.LayoutParams(widhLinearLayoutBorder,
                         LinearLayout.LayoutParams.WRAP_CONTENT)
 
                     listLinearLayoutView[1].layoutParams = param
@@ -160,71 +166,58 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            /** Ajusta El ancho del imageview que contiene la lista**/
-            var widthImageView = stepWidth*numberSteps
+            /** Ajusta el ancho del imageview**/
+            var widthImageView = stepWidth*numberStepMaster
             imageViewLine.layoutParams.width = widthImageView
 
-
-            linearLayoutRangbar.layoutParams.width = stepWidth*list.size
+            /** Ajusta el padding del seekbar**/
+            seekbarPaddingManager(listaMaestra)
 
         },1)
 
-          /*  Log.e("--------------","--------------------")
-            var numberSteps = list.size-1
-            var stepWidh = (constraintMaster.width-textValue7.width-100)/numberSteps
-            Log.e("TAMANO TEXTO",textValue7.width.toString())
-            Log.e("CALCULO 1", "(${constraintMaster.width}-${textValue7.width}-100)/${numberSteps}" )
-            Log.e("CALCULO 1 RES", stepWidh.toString() )
-            var widhLinearLayoutLast = (textValue7.width/2)+(stepWidh/2)
-            var widhLinearLayoutFirts = (textValue1.width/2)+(stepWidh/2)
-            Log.e("widhLinearLayoutFirts",widhLinearLayoutFirts.toString())
+    }
 
-            textValue1.width = widhLinearLayoutFirts
-            textValue7.width = widhLinearLayoutLast
+    private fun seekbarPaddingManager(newList: List<Float>){
+
+        linearLayoutRangbar.layoutParams.width = imageViewLine.width + rangerSlider.width
+        var  contStepLeft = 0
+        var firtsValue = newList[0]
+        for (i in listaMaestra.indices){
+            if (listaMaestra[i] == firtsValue){
+                contStepLeft = i
+                break
+            }
+        }
 
 
-            for (i in list.indices) {
-
-                if (i==0){
-                    textValue1.text = list[i].toInt().toString()
-                    listTextView.add(textValue1)
-                }else if (i == list.size-1){
-                    textValue7.text = "1k+"
-                    listTextView.add(textValue7)
-                }
+        var  contStepRight = 0
+        var  lastValue = newList[newList.size-1]
+        var reverListMaster = listaMaestra.reversed()
+        for (i in reverListMaster.indices){
+            if (reverListMaster[i] == lastValue){
+                contStepRight = i
+                break
             }
 
-            textValue2.width = stepWidh
-            textValue3.width = stepWidh
-            textValue4.width = stepWidh
-            textValue5.width = stepWidh
-            textValue6.width = stepWidh
+        }
+        Log.e("VALOR", "izquierda $firtsValue   derecha $lastValue")
+        Log.e("CONTADOR PADDING", "izquierda $contStepLeft   derecha $contStepRight")
 
+        var paddingLeftBar = (rangerSlider.width/2)
+        if (contStepLeft>0){
+            paddingLeftBar = (contStepLeft*stepWidth)- (rangerSlider.width)/2
+        }
 
+        var paddingRightBar = (rangerSlider.width/2)
+        if (contStepRight>0){
+            paddingRightBar = (contStepRight*stepWidth) - (rangerSlider.width)/2
+        }
 
-
-        Handler().postDelayed({
-
-            Log.e("1",textValue1.width.toString())
-
-            Log.e("2",textValue2.width.toString())
-            Log.e("3",textValue3.width.toString())
-
-
-            var paddingRangeBar = ((constraintMaster.width-linearLayoutValues.width)/2)/2
-            Log.e("View", "${constraintMaster.width}-${linearLayoutValues.width}")
-            Log.e("PaddingRangerBar",paddingRangeBar.toString())
-
-            val params = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT,ConstraintLayout.LayoutParams.MATCH_PARENT)
-            params.setMargins(paddingRangeBar, 0, paddingRangeBar, 0)
-
-            linearLayoutRangbar.layoutParams = params
-            //imageViewLine.layoutParams = params
-
-        },1)*/
-
-
-
+        Log.e("PADDING", "izquierda $paddingLeftBar   derecha $paddingRightBar")
+        linearLayoutRangbar.setPadding(paddingLeftBar, 0, paddingRightBar, 0)
 
     }
+
+
+
 }
