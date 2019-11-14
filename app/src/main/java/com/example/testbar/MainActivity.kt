@@ -1,20 +1,13 @@
 package com.example.testbar
-import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.Gravity
 import android.view.ViewTreeObserver
-import android.widget.GridView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import kotlinx.android.synthetic.main.activity_main.*
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-
 
 
 
@@ -39,7 +32,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             if(contadorCargas==0){
-                var listFloat= listOf(10F,15F,20F,50F,80F,85F,100F,150F)
+                var listFloat= listOf(10F,15F,20F,25F,50F,80F,85F,100F,150F)
                 setearLosDatos(listFloat)
                 contadorCargas++
             }else if (contadorCargas==1){
@@ -47,7 +40,7 @@ class MainActivity : AppCompatActivity() {
                 setearLosDatos(listFloat)
                 contadorCargas++
             }else if (contadorCargas == 2){
-                var listFloat= listOf(85F)
+                var listFloat= listOf(25F,85F)
                 setearLosDatos(listFloat)
                 contadorCargas++
             }else if (contadorCargas==3){
@@ -61,9 +54,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
         manejadorVisual()
-
     }
 
     private fun  manejadorVisual(){
@@ -75,11 +66,7 @@ class MainActivity : AppCompatActivity() {
                 //pintadoLinearValue()
             }
         })
-
-
     }
-
-
 
 
     private fun setearLosDatos(list:List<Float>){
@@ -173,7 +160,9 @@ class MainActivity : AppCompatActivity() {
             /** Ajusta el ancho del LinearLayoout que dentro contiene el linearlayout que contiene el rangbar**/
             linearLayoutContainerRangBar.layoutParams.width = widthImageView+rangerSlider.width
             /** Ajusta el padding del seekbar**/
-            seekbarPaddingManager(listaMaestra)
+            Handler().postDelayed({
+                seekbarPaddingManager(listaMaestra)
+            },1)
 
         },1)
 
@@ -181,7 +170,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun seekbarPaddingManager(newList: List<Float>){
-
+        /** Cuenta los steps de izquierda y derecha **/
         linearLayoutRangbar.layoutParams.width = imageViewLine.width + rangerSlider.width
         var  contStepLeft = 0
         var firtsValue = newList[0]
@@ -191,7 +180,6 @@ class MainActivity : AppCompatActivity() {
                 break
             }
         }
-
 
         var  contStepRight = 0
         var  lastValue = newList[newList.size-1]
@@ -204,36 +192,17 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-
+        /** Calcula el padding de izquierda y derecha **/
         var paddingLeftBar = 0
         if (contStepLeft>0){
-            if (contStepLeft*stepWidth==0){
-                paddingLeftBar = 0
-            }else{
-                paddingLeftBar = (contStepLeft*stepWidth) - (rangerSlider.width/2)
-            }
-
+            paddingLeftBar = (contStepLeft*stepWidth)
         }
 
         var paddingRightBar = 0
         if (contStepRight>0){
-            if (contStepRight*stepWidth==0){
-                paddingRightBar = 0
-            }else{
-                paddingRightBar = (contStepRight*stepWidth) - (rangerSlider.width/2)
-            }
-
+            paddingRightBar = (contStepRight*stepWidth)
         }
         linearLayoutRangbar.setPadding(paddingLeftBar, 0, paddingRightBar, 0)
-
-        Log.e("-----------------","---------------------------")
-        Log.e("RANGO DE VALORES", "minimo $firtsValue   maximo $lastValue")
-        Log.e("CONTADORES", "izquierda $contStepLeft   derecha $contStepRight")
-        Log.e("COMPONENTES CALCULO  DERECHA", "contStepRight $contStepRight   stepWidth $stepWidth  rangerSlider.width ${rangerSlider.width}")
-        Log.e("CALCULO DERECHA","${paddingRightBar}")
-        Log.e("COMPONENTES CALCULO  IZQUIERDA", "contStepRight $contStepLeft   stepWidth $stepWidth  rangerSlider.width ${rangerSlider.width}")
-        Log.e("CALCULO IZQUIERDA","${paddingLeftBar}")
-
 
     }
 
