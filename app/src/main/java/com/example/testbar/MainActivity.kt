@@ -34,28 +34,28 @@ class MainActivity : AppCompatActivity() {
 
 
         buttonChange.setOnClickListener{
-            if (contadorCargas>4){
+            if (contadorCargas==5){
                 contadorCargas = 0
             }
 
             if(contadorCargas==0){
-                var listFloat= listOf(10F,20F,50F,100F,200F,500F,600F,1000F)
+                var listFloat= listOf(10F,15F,20F,50F,80F,85F,100F,150F)
                 setearLosDatos(listFloat)
                 contadorCargas++
             }else if (contadorCargas==1){
-                var listFloat= listOf(20F,50F,200F)
+                var listFloat= listOf(20F,50F,150F)
                 setearLosDatos(listFloat)
                 contadorCargas++
             }else if (contadorCargas == 2){
-                var listFloat= listOf(500F)
+                var listFloat= listOf(85F)
                 setearLosDatos(listFloat)
                 contadorCargas++
             }else if (contadorCargas==3){
-                var listFloat= listOf(10F,50F,100F,1000F)
+                var listFloat= listOf(10F,50F,80F,100F)
                 setearLosDatos(listFloat)
                 contadorCargas++
             }else if(contadorCargas==4){
-                var listFloat= listOf(100F,200F)
+                var listFloat= listOf(100F,150F)
                 setearLosDatos(listFloat)
                 contadorCargas++
             }
@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity() {
 
             var textViewValue = TextView(this)
             textViewValue.id = i
-            textViewValue.text = list[i].toString()
+            textViewValue.text = list[i].toInt().toString()
 
             var param =  LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT)
@@ -170,10 +170,13 @@ class MainActivity : AppCompatActivity() {
             var widthImageView = stepWidth*numberStepMaster
             imageViewLine.layoutParams.width = widthImageView
 
+            /** Ajusta el ancho del LinearLayoout que dentro contiene el linearlayout que contiene el rangbar**/
+            linearLayoutContainerRangBar.layoutParams.width = widthImageView+rangerSlider.width
             /** Ajusta el padding del seekbar**/
             seekbarPaddingManager(listaMaestra)
 
         },1)
+
 
     }
 
@@ -200,21 +203,37 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
-        Log.e("VALOR", "izquierda $firtsValue   derecha $lastValue")
-        Log.e("CONTADOR PADDING", "izquierda $contStepLeft   derecha $contStepRight")
 
-        var paddingLeftBar = (rangerSlider.width/2)
+
+        var paddingLeftBar = 0
         if (contStepLeft>0){
-            paddingLeftBar = (contStepLeft*stepWidth)- (rangerSlider.width)/2
+            if (contStepLeft*stepWidth==0){
+                paddingLeftBar = 0
+            }else{
+                paddingLeftBar = (contStepLeft*stepWidth) - (rangerSlider.width/2)
+            }
+
         }
 
-        var paddingRightBar = (rangerSlider.width/2)
+        var paddingRightBar = 0
         if (contStepRight>0){
-            paddingRightBar = (contStepRight*stepWidth) - (rangerSlider.width)/2
-        }
+            if (contStepRight*stepWidth==0){
+                paddingRightBar = 0
+            }else{
+                paddingRightBar = (contStepRight*stepWidth) - (rangerSlider.width/2)
+            }
 
-        Log.e("PADDING", "izquierda $paddingLeftBar   derecha $paddingRightBar")
+        }
         linearLayoutRangbar.setPadding(paddingLeftBar, 0, paddingRightBar, 0)
+
+        Log.e("-----------------","---------------------------")
+        Log.e("RANGO DE VALORES", "minimo $firtsValue   maximo $lastValue")
+        Log.e("CONTADORES", "izquierda $contStepLeft   derecha $contStepRight")
+        Log.e("COMPONENTES CALCULO  DERECHA", "contStepRight $contStepRight   stepWidth $stepWidth  rangerSlider.width ${rangerSlider.width}")
+        Log.e("CALCULO DERECHA","${paddingRightBar}")
+        Log.e("COMPONENTES CALCULO  IZQUIERDA", "contStepRight $contStepLeft   stepWidth $stepWidth  rangerSlider.width ${rangerSlider.width}")
+        Log.e("CALCULO IZQUIERDA","${paddingLeftBar}")
+
 
     }
 
