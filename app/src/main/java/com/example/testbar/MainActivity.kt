@@ -1,4 +1,6 @@
 package com.example.testbar
+import android.annotation.SuppressLint
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -7,6 +9,8 @@ import android.view.Gravity
 import android.view.ViewTreeObserver
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import com.github.guilhe.views.SeekBarRangedView
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -32,23 +36,23 @@ class MainActivity : AppCompatActivity() {
             }
 
             if(contadorCargas==0){
-                var listFloat= listOf(10F,15F,20F,25F,50F,80F,85F,100F,150F)
+                var listFloat= listOf(10F,12F,20F,30F,36F,40F,48F,50F)
                 setearLosDatos(listFloat)
                 contadorCargas++
             }else if (contadorCargas==1){
-                var listFloat= listOf(20F,50F,150F)
+                var listFloat= listOf(12F,30F,36F,40F)
                 setearLosDatos(listFloat)
                 contadorCargas++
             }else if (contadorCargas == 2){
-                var listFloat= listOf(25F,85F)
+                var listFloat= listOf(48F)
                 setearLosDatos(listFloat)
                 contadorCargas++
             }else if (contadorCargas==3){
-                var listFloat= listOf(10F,50F,80F,100F)
+                var listFloat= listOf(10F,36F,50F)
                 setearLosDatos(listFloat)
                 contadorCargas++
             }else if(contadorCargas==4){
-                var listFloat= listOf(100F,150F)
+                var listFloat= listOf(20F,40F)
                 setearLosDatos(listFloat)
                 contadorCargas++
             }
@@ -82,6 +86,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /** LINEAR PINTAR MANGER **/
+    //region Pintado De Barra de valores y RangBar
     private fun pintadoLinearValue(list: List<Float>){
 
         for (i in list.indices){
@@ -204,7 +209,127 @@ class MainActivity : AppCompatActivity() {
         }
         linearLayoutRangbar.setPadding(paddingLeftBar, 0, paddingRightBar, 0)
 
+        managerRangeBar(newList)
     }
+    //endregion
+
+    //region MANAGER RANGBAR
+    private fun managerRangeBar(listFloat: List<Float>){
+        linearLayoutRangbar.removeAllViews()
+
+        var seekBarNew = reloadRangBar(listFloat)
+
+
+        seekBarNew.setOnSeekBarRangedChangeListener(object :
+            SeekBarRangedView.OnSeekBarRangedChangeListener {
+            override fun onChanged(view: SeekBarRangedView, minValue: Float, maxValue: Float) {
+                Log.e("RANGO VALOR","MIN $minValue  MAX $maxValue")
+                Log.e("RANGO VALOR","MIN ${calculateListRange(listFloat)[minValue.toInt()]}  MAX ${calculateListRange(listFloat)[maxValue.toInt()]}")
+            }
+
+            override fun onChanging(view: SeekBarRangedView, minValue: Float, maxValue: Float) {
+
+            }
+
+            private fun updateLayout(minValue: Float, maxValue: Float) {
+
+            }
+        })
+
+        linearLayoutRangbar.addView(seekBarNew)
+
+    }
+
+    @SuppressLint("NewApi")
+    private fun reloadRangBar(list:List<Float>):SeekBarRangedView{
+        var seekbarNew = SeekBarRangedView(this)
+        seekbarNew.setThumbsImageResource(R.drawable.ic_ucoin)
+        seekbarNew.setBackgroundColor(getColor(R.color.grayLight))
+        seekbarNew.setProgressColor(getColor(R.color.colorPrimary))
+        seekbarNew.setBackgroundHeight(12F)
+        seekbarNew.setProgressHeight(12F)
+
+        seekbarNew.setProgressStepRadius(25F)
+
+        seekbarNew.minValue = 0F
+        seekbarNew.maxValue = calculateRangerValue(list)
+
+
+        seekbarNew.progressSteps = calculateSteps(list,calculateListRange(list))
+        seekbarNew.enableProgressBySteps(true)
+
+        return  seekbarNew
+    }
+
+    private fun calculateRangerValue(newList:List<Float>):Float{
+        var firstItem = newList[0]
+        var lastItem = newList[newList.size-1]
+        var countValues = 0
+
+        for (i in listaMaestra.indices){
+            if (i == 0){
+                if (listaMaestra[i] == firstItem){
+                    countValues++
+                }
+            }else if (i == listaMaestra.size-1){
+                if (listaMaestra[i]== lastItem){
+                    countValues++
+                }
+            }else{
+                if (listaMaestra[i] in firstItem..lastItem){
+                    countValues++
+                }
+            }
+        }
+
+        var stringValues = "Steps: $countValues \n"
+        for (i in newList.indices){
+            stringValues = stringValues+"\n"+newList[i].toString()
+        }
+        textValues.text = stringValues
+
+        return (countValues-1).toFloat()
+
+    }
+
+    private fun calculateListRange(newList:List<Float>):List<Float>{
+        var listNewRang:ArrayList<Float> = ArrayList()
+        var firstItem = newList[0]
+        var lastItem = newList[newList.size-1]
+
+        for (i in listaMaestra.indices){
+            if (i == 0){
+                if (listaMaestra[i] == firstItem){
+                    listNewRang.add(listaMaestra[i])
+                }
+            }else if (i == listaMaestra.size-1){
+                if (listaMaestra[i]== lastItem){
+                    listNewRang.add(listaMaestra[i])
+                }
+            }else{
+                if (listaMaestra[i] in firstItem..lastItem){
+                    listNewRang.add(listaMaestra[i])
+                }
+            }
+        }
+
+        return  listNewRang
+    }
+
+    private fun  calculateSteps(newList:List<Float>,listNewRang:List<Float>):List<Float>{
+        var listStep: ArrayList<Float> = ArrayList()
+
+        for (i in listNewRang.indices){
+            for (j in newList.indices){
+                if (listNewRang[i] == newList[j]){
+                    listStep.add(i.toFloat())
+                }
+            }
+        }
+        return  listStep
+    }
+
+    //endregion
 
 
 
