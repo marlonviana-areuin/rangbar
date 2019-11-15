@@ -1,6 +1,5 @@
 package com.example.testbar
 import android.annotation.SuppressLint
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -9,7 +8,6 @@ import android.view.Gravity
 import android.view.ViewTreeObserver
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import com.github.guilhe.views.SeekBarRangedView
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -63,11 +61,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun  manejadorVisual(){
 
-        constraintMaster.viewTreeObserver.addOnGlobalLayoutListener(object:
+        constraintMasterRangBar.viewTreeObserver.addOnGlobalLayoutListener(object:
             ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                constraintMaster.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                //pintadoLinearValue()
+                constraintMasterRangBar.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                //seekbarWidthManager()
             }
         })
     }
@@ -79,7 +77,7 @@ class MainActivity : AppCompatActivity() {
             listaMaestra= list
             listaMaestraObtenida= true
 
-            pintadoLinearValue(listaMaestra)
+            seekbarWidthManager(listaMaestra)
         }else{
             seekbarPaddingManager(list)
         }
@@ -87,7 +85,7 @@ class MainActivity : AppCompatActivity() {
 
     /** LINEAR PINTAR MANGER **/
     //region Pintado De Barra de valores y RangBar
-    private fun pintadoLinearValue(list: List<Float>){
+    private fun seekbarWidthManager(list: List<Float>){
 
         for (i in list.indices){
 
@@ -138,7 +136,7 @@ class MainActivity : AppCompatActivity() {
         Handler().postDelayed({
             /** obtiene el numero de step y el ancho entre step**/
             numberStepMaster = list.size-1
-            stepWidth = (constraintMaster.width- listTextView[listTextView.size-1].width-100)/numberStepMaster
+            stepWidth = (constraintMasterRangBar.width- listTextView[listTextView.size-1].width-100)/numberStepMaster
 
             var widhLinearLayoutBorder = (listTextView[listTextView.size-1].width/2)+(stepWidth/2)
 
@@ -253,7 +251,7 @@ class MainActivity : AppCompatActivity() {
         seekbarNew.setBackgroundHeight(12F)
         seekbarNew.setProgressHeight(12F)
 
-        seekbarNew.setProgressStepRadius(25F)
+        seekbarNew.setProgressStepRadius(1F)
 
         seekbarNew.minValue = 0F
         seekbarNew.maxValue = calculateRangerValue(list)
@@ -354,8 +352,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        Log.e("COMPARACION", "------------------------------")
-
     }
 
     //endregion

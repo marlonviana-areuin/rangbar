@@ -8,7 +8,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintMaster"
+        android:id="@+id/constraintMasterRangBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -26,7 +26,6 @@
             android:id="@+id/linearLayoutContainerRangBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/sp_blue"
             android:elevation="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -46,7 +45,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:elevation="2dp"
-                    android:background="@drawable/sp_green"
                     app:backgroundColor="@color/grayLight"
                     app:backgroundHeight="7dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -78,8 +76,6 @@
             android:id="@+id/linearLayoutValues"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/sp_orange"
             android:layout_marginBottom="8dp"
             android:gravity="center"
             android:orientation="horizontal"
@@ -99,8 +95,8 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_ucoin"
         android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="@+id/constraintMaster"
-        app:layout_constraintTop_toTopOf="@+id/constraintMaster" />
+        app:layout_constraintStart_toStartOf="@+id/constraintMasterRangBar"
+        app:layout_constraintTop_toTopOf="@+id/constraintMasterRangBar" />
 
 
 
@@ -113,7 +109,7 @@
         app:layout_constraintBottom_toTopOf="@+id/buttonChange"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintMaster" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintMasterRangBar" />
 
     <Button
         android:id="@+id/buttonChange"
