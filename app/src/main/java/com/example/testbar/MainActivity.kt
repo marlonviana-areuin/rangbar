@@ -218,17 +218,21 @@ class MainActivity : AppCompatActivity() {
         linearLayoutRangbar.removeAllViews()
 
         var seekBarNew = reloadRangBar(listFloat)
+        var listFilterStep = calculateListRange(listFloat)
+
+        paintTextValue(listFilterStep[0],listFilterStep[listFilterStep.size-1],listFloat)
 
 
         seekBarNew.setOnSeekBarRangedChangeListener(object :
             SeekBarRangedView.OnSeekBarRangedChangeListener {
             override fun onChanged(view: SeekBarRangedView, minValue: Float, maxValue: Float) {
                 Log.e("RANGO VALOR","MIN $minValue  MAX $maxValue")
-                Log.e("RANGO VALOR","MIN ${calculateListRange(listFloat)[minValue.toInt()]}  MAX ${calculateListRange(listFloat)[maxValue.toInt()]}")
+                Log.e("RANGO VALOR","MIN ${listFilterStep[minValue.toInt()]}  MAX ${listFilterStep[maxValue.toInt()]}")
+                paintTextValue(listFilterStep[minValue.toInt()],listFilterStep[maxValue.toInt()],listFloat)
             }
 
             override fun onChanging(view: SeekBarRangedView, minValue: Float, maxValue: Float) {
-
+                updateLayout(minValue,maxValue)
             }
 
             private fun updateLayout(minValue: Float, maxValue: Float) {
@@ -327,6 +331,31 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return  listStep
+    }
+
+    @SuppressLint("NewApi")
+    private fun paintTextValue(minValue:Float, maxValue:Float, newList:List<Float>){
+        var listStepColor:ArrayList<Float> = ArrayList()
+
+        for (valuesList:Float in newList){
+            if (valuesList in minValue..maxValue){
+                listStepColor.add(valuesList)
+            }
+        }
+
+        for (textView:TextView in listTextView){
+            textView.setTextColor(getColor(R.color.grayLight))
+        }
+
+        for (textView:TextView in listTextView){
+            for (value:Float in listStepColor){
+                if (textView.text.toString().toInt() == value.toInt()){
+                    textView.setTextColor(getColor(R.color.colorPrimary))
+                }
+            }
+        }
+        Log.e("COMPARACION", "------------------------------")
+
     }
 
     //endregion
